@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'modal/post.dart';
+import './demo/drawer_demo.dart';
+import './demo/bottom_navigation_bar_demo.dart';
+import './demo/listview_demo.dart';
 
 void main() {
   runApp(
@@ -12,66 +14,56 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Home(),
-     theme: ThemeData(
-       primaryColor: Colors.yellow
+      theme: ThemeData(
+       primarySwatch: Colors.deepPurple,
+       highlightColor: Color.fromRGBO(255, 255, 255, 0.5),
+       splashColor: Colors.white70,
      ),
     );
   }
 }
 // Home Widget
 class Home extends StatelessWidget {
-  Widget _listItemBuilder(BuildContext context, int index) {
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.all(8),
-      child: Column(
-        children: <Widget>[
-          Image.network(posts[index].imageUrl),
-          SizedBox(height: 16),
-          Text(
-            posts[index].title,
-            style: Theme.of(context).textTheme.title,
-          ),
-          Text(
-            posts[index].author,
-            style: Theme.of(context).textTheme.subhead,
-          ),
-          SizedBox(height: 16)
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
           title: Text('Flutter'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              tooltip: 'Search',
+              onPressed: () => debugPrint('search'),
+            )
+          ],
           elevation: 30, //阴影
+          bottom: TabBar(
+            unselectedLabelColor: Colors.black38,
+            indicatorColor: Colors.black54,
+            indicatorSize: TabBarIndicatorSize.label,
+            indicatorWeight: 1.0,
+            tabs: <Widget>[
+              Tab(icon: Icon(Icons.local_florist)),
+              Tab(icon: Icon(Icons.change_history)),
+              Tab(icon: Icon(Icons.directions_bike)),
+            ],
+          )
         ),
-         body: ListView.builder(
-           itemCount: posts.length,
-           itemBuilder: _listItemBuilder,
-         )
-      );
-  }
-}
-
-// Hello Widget
-class Hello extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'hello', 
-        textDirection: TextDirection.ltr,
-        style: TextStyle(
-          fontSize: 40,
-          fontWeight: FontWeight.bold,
-          color: Colors.yellow,
-        ),
+         body: TabBarView(
+           children: <Widget>[
+             ListViewDemo(),
+             Icon(Icons.change_history, size: 128, color: Colors.red),
+             Icon(Icons.directions_bike, size: 128,color: Colors.blue),
+           ],
+         ),
+         drawer: DrawerDemo(),
+         bottomNavigationBar: BottomNavigationBarDemo(),
       ),
     );
   }
